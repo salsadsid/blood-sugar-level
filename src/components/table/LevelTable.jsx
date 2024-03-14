@@ -17,7 +17,11 @@ const columns = [
     accessorKey: "time",
     header: "Date & Time",
     cell: ({ getValue }) => {
-      const getDate = new Date(getValue()).toISOString().split("T");
+      let getDate = new Date(getValue()).toISOString();
+      let startTime = new Date(getDate);
+      const offset = startTime.getTimezoneOffset();
+      startTime = new Date(startTime.getTime() - offset * 60 * 1000);
+      getDate = startTime.toISOString().split("T");
       console.log(getDate);
       const date = getDate[0];
       const time =

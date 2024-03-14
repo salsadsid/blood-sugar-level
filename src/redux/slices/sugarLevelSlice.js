@@ -15,9 +15,14 @@ export const sugarLevelSlice = createSlice({
     setSavedSugarLevel: (state, { payload }) => {
       state.savedSugarLevel = [...state.savedSugarLevel, payload];
     },
+    reset: (state) => {
+      state.sugarLevel = null;
+      state.savedSugarLevel = [];
+    },
   },
 });
 
-export const { setSugarLevel, setSavedSugarLevel } = sugarLevelSlice.actions;
+export const { setSugarLevel, setSavedSugarLevel, reset } =
+  sugarLevelSlice.actions;
 
 export default sugarLevelSlice.reducer;

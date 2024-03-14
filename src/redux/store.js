@@ -1,12 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import sugarLevelSlice from "./slices/sugarLevelSlice";
+import persistReducer from "redux-persist/es/persistReducer";
+import { persistConfig, reducers } from "./storeConfig";
 
-const reducer = {
-  sugarLevel: sugarLevelSlice,
-};
-
+const persistedReducer = persistReducer(persistConfig, reducers);
 const store = configureStore({
-  reducer: reducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });
 

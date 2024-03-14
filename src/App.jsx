@@ -10,13 +10,20 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "./components/ui/drawer";
-import { CheckCheck } from "lucide-react";
+import { CheckCheck, Eraser } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  reset,
   setSavedSugarLevel,
   setSugarLevel,
 } from "./redux/slices/sugarLevelSlice";
 import LevelTable from "./components/table/LevelTable";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./components/ui/tooltip";
 
 function App() {
   const [level, setLevel] = useState(6);
@@ -35,6 +42,9 @@ function App() {
     };
     dispatch(setSugarLevel(data));
     dispatch(setSavedSugarLevel(data));
+  };
+  const handleDelete = () => {
+    dispatch(reset());
   };
   return (
     <main className="flex flex-col gap-10 justify-center items-center min-h-screen">
@@ -55,14 +65,41 @@ function App() {
           />
           <span className="text-xl">mmol/L</span>
         </>
-        <Button onClick={handleSave} variant="outline" size="icon">
-          <CheckCheck />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={handleSave} variant="outline" size="icon">
+                <CheckCheck />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>Save Locally</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </section>
       <section>
         {savedSugarLevel?.length > 0 && (
           <>
-            <p className="text-center mb-2 font-mono">Blood Sugar Level</p>
+            <section className="flex justify-center items-center gap-2 mb-3">
+              <p className="font-semibold text-xl">Blood Sugar Level</p>{" "}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={handleDelete}
+                      variant="outline"
+                      size="icon"
+                    >
+                      <Eraser />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Clear local storage</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </section>
             <LevelTable />
           </>
         )}
