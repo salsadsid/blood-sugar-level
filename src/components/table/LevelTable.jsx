@@ -22,7 +22,7 @@ const columns = [
       const offset = startTime.getTimezoneOffset();
       startTime = new Date(startTime.getTime() - offset * 60 * 1000);
       getDate = startTime.toISOString().split("T");
-      console.log(getDate);
+      // console.log(getDate);
       const date = getDate[0];
       const time =
         getDate[1].split(":")[0] +

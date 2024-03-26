@@ -1,15 +1,4 @@
 import { useState } from "react";
-import { Button } from "./components/ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "./components/ui/drawer";
 import { CheckCheck, Eraser } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,15 +14,42 @@ import {
   TooltipTrigger,
 } from "./components/ui/tooltip";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+const formSchema = z.object({
+  patientName: z.string().min(2, {
+    message: "Patient name must be at least 2 characters.",
+  }),
+});
 function App() {
   const [level, setLevel] = useState(6);
   const [level2, setLevel2] = useState(10);
-  console.log(level, level2);
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      patientName: "Mr. John",
+    },
+  });
+  // console.log(level, level2);
   const dispatch = useDispatch();
   const { sugarLevel, savedSugarLevel } = useSelector(
     (state) => state.sugarLevel
   );
-  console.log(sugarLevel, savedSugarLevel);
+  // console.log(sugarLevel, savedSugarLevel);
   const handleSave = () => {
     const data = {
       id: Date.now(),
@@ -46,26 +62,61 @@ function App() {
   const handleDelete = () => {
     dispatch(reset());
   };
+  const onSubmit = (data) => {
+    console.log(data);
+  };
   return (
     <main className="flex flex-col gap-10 justify-center items-center min-h-screen">
       <section className="flex items-center gap-3">
-        <input
-          type="number"
-          value={level}
-          onChange={(e) => setLevel(e.target.value.slice(0, 2))}
-          className="w-20 text-6xl font-semibold px-2 py-1 outline-none"
-        />
-        <>
-          <span className="text-4xl">.</span>
-          <input
-            type="number"
-            value={level2}
-            onChange={(e) => setLevel2(e.target.value.slice(0, 2))}
-            className="w-16 text-4xl font-semibold px-2 py-1 outline-none"
-          />
-          <span className="text-xl">mmol/L</span>
-        </>
-        <TooltipProvider>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8 flex flex-col"
+          >
+            <FormField
+              control={form.control}
+              name="patientName"
+              className="w-full"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="mx-auto">Patient Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder=""
+                      className="min-w-[320px]"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  {/* <FormMessage /> */}
+                </FormItem>
+              )}
+            />
+            <article className="flex items-center">
+              <input
+                type="number"
+                value={level}
+                onChange={(e) => setLevel(e.target.value.slice(0, 2))}
+                className="w-20 text-6xl font-semibold px-2 py-1 outline-none"
+              />
+              <>
+                <span className="text-4xl">.</span>
+                <input
+                  type="number"
+                  value={level2}
+                  onChange={(e) => setLevel2(e.target.value.slice(0, 2))}
+                  className="w-16 text-4xl font-semibold px-2 py-1 outline-none"
+                />
+                <span className="text-xl">mmol/L</span>
+              </>
+            </article>
+            <Button onClick={handleSave} type="submit">
+              Submit
+            </Button>
+          </form>
+        </Form>
+
+        {/* <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button onClick={handleSave} variant="outline" size="icon">
@@ -76,7 +127,7 @@ function App() {
               <p>Save Locally</p>
             </TooltipContent>
           </Tooltip>
-        </TooltipProvider>
+        </TooltipProvider> */}
       </section>
       <section>
         {savedSugarLevel?.length > 0 && (
