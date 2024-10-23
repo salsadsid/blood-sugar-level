@@ -1,11 +1,6 @@
+import { Eraser } from "lucide-react";
 import { useState } from "react";
-import { CheckCheck, Eraser } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  reset,
-  setSavedSugarLevel,
-  setSugarLevel,
-} from "./redux/slices/sugarLevelSlice";
 import LevelTable from "./components/table/LevelTable";
 import {
   Tooltip,
@@ -13,6 +8,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./components/ui/tooltip";
+import {
+  reset,
+  setSavedSugarLevel,
+  setSugarLevel,
+} from "./redux/slices/sugarLevelSlice";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -22,11 +22,9 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage,
+  FormLabel
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
@@ -44,6 +42,7 @@ function App() {
       patientName: "Mr. John",
     },
   });
+  // console.log(level, level2);
   // console.log(level, level2);
   const dispatch = useDispatch();
   const { sugarLevel, savedSugarLevel } = useSelector(
